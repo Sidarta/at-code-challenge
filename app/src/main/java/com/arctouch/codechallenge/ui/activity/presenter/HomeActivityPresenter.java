@@ -8,6 +8,7 @@ public interface HomeActivityPresenter {
 
     void getUpcomingMovies();
     void getMoreUpcomingMovies();
+    void start();
 
     interface View {
         void refreshMoviesList(List<Movie> movies);

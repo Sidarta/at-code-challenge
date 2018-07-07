@@ -2,16 +2,21 @@ package com.arctouch.codechallenge.ui.activity.presenter.implementation;
 
 import android.util.Log;
 
+import com.arctouch.codechallenge.callback.OnGetGenres;
 import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.entity.Genre;
 import com.arctouch.codechallenge.entity.Movie;
 import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
+import com.arctouch.codechallenge.repository.GenresRepository;
 import com.arctouch.codechallenge.repository.UpcomingMoviesRepository;
+import com.arctouch.codechallenge.repository.implementation.GenresRepositoryImplementation;
 import com.arctouch.codechallenge.repository.implementation.UpcomingMoviesRepositoryImplementation;
 import com.arctouch.codechallenge.ui.activity.presenter.HomeActivityPresenter;
 
-public class HomeActivityPresenterImplementation implements HomeActivityPresenter, OnGetUpcomingMovies {
+import java.util.List;
+
+public class HomeActivityPresenterImplementation implements HomeActivityPresenter, OnGetUpcomingMovies, OnGetGenres{
 
     private HomeActivityPresenter.View mView;
     private int mPage = 0;
@@ -30,6 +35,13 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
     public void getMoreUpcomingMovies() {
         UpcomingMoviesRepository repository = new UpcomingMoviesRepositoryImplementation();
         repository.getUpcomingMovies(this.mPage, this);
+    }
+
+    @Override
+    public void start() {
+        //get genres first to update cache
+        GenresRepository repository = new GenresRepositoryImplementation();
+        repository.getGenres(this);
     }
 
     @Override
@@ -55,5 +67,17 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
     public void onGetUpcomingMoviesFailed(String errorMsg) {
         //TODO need better message here?
         Log.e("Presenter", "Could not load movies");
+    }
+
+    @Override
+    public void onGetGenresSuccessful(List<Genre> genres) {
+        //after genres fetch, we keep the initialization going - fetch upcoming movies
+        this.getUpcomingMovies();
+    }
+
+    @Override
+    public void onGetGenresFailed(String errorMsg) {
+        //TODO need better message here?
+        Log.e("Presenter", "Could not load genres for movies");
     }
 }

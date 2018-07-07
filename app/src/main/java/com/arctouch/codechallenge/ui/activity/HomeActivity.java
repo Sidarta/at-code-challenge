@@ -86,7 +86,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
         mMoviesRecyclerView.addOnScrollListener(mScrollListener);
 
         mHomeSwipeRefresh.setRefreshing(true);
-        mHomeActivityPresenter.getUpcomingMovies();
+        mHomeActivityPresenter.start();
         this.goToListTop();
     }
 
