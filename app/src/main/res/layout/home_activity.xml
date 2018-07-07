@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_swipe_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.arctouch.codechallenge.ui.activity.HomeActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="12dp"
-        android:paddingTop="12dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:itemCount="10"
-        tools:listitem="@layout/movie_item" />
+        android:id="@+id/relative_layout">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:visibility="gone" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:itemCount="10"
+            tools:listitem="@layout/movie_item" />
 
-</RelativeLayout>
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--tools:visibility="gone" />-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_top"
+
+            android:visibility="gone"
+            android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

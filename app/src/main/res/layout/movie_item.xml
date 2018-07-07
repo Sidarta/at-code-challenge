@@ -11,6 +11,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:id="@+id/movie_card_view"
     app:cardCornerRadius="0dp">
 
     <RelativeLayout

@@ -1,10 +1,25 @@
-package com.arctouch.codechallenge.model;
+package com.arctouch.codechallenge.entity;
 
 import java.util.List;
 
 public class GenreResponse {
 
-    public List<Genre> genres;
+    private List<Genre> genres;
+
+    public GenreResponse() {
+    }
+
+    public GenreResponse(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
 
     @Override
     public boolean equals(Object o) {
