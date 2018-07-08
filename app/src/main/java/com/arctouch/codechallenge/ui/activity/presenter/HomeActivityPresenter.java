@@ -9,7 +9,9 @@ public interface HomeActivityPresenter {
     void getUpcomingMovies();
     void getMoreUpcomingMovies();
     void start();
-//    void getUpcomingMovies(String query);
+    void getSearchMovies(String query);
+    void getMoreSearchMovies(String query);
+    void clearMoviesList();
 
     interface View {
         void refreshMoviesList(List<Movie> movies);

@@ -51,6 +51,9 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
     //list item listener for tap action
     private MovieItemListener mMovieItemListener;
 
+    //search view
+    SearchView mSearchView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +83,20 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
         mScrollListener = new HomeRecyclerViewScrollListener((LinearLayoutManager) mLayoutManager) {
             @Override
             protected void onLoadMore(int currentPage, int totalItemCount, RecyclerView recyclerView) {
-                mHomeActivityPresenter.getMoreUpcomingMovies();
+                CharSequence query = mSearchView.getQuery();
+
+                //if there is some text on query
+                if(query != null && query.length() > 0) {
+
+                    //query needs to be bigger than 3 for the scrolling to happen
+                    if(query.length() >= 3){
+                        mHomeActivityPresenter.getMoreSearchMovies(query.toString());
+                    }
+
+                    //if no query, then normal infinite scrolling
+                } else {
+                    mHomeActivityPresenter.getMoreUpcomingMovies();
+                }
             }
 
             @Override
@@ -140,13 +156,13 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
         inflater.inflate(R.menu.search_menu, menu);
 
         //searchview
-        SearchView mSearchView = (SearchView) menu.findItem(R.id.search)
+        mSearchView = (SearchView) menu.findItem(R.id.search)
                 .getActionView();
 
         //hint text
         mSearchView.setQueryHint(getString(R.string.search_hint));
 
-        // example
+        // perform queries
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -156,9 +172,12 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                // we only perform queries bigger than 3 chars
                 if(newText.length() >= 3){
 
                     //perform query here
+                    mHomeActivityPresenter.getSearchMovies(newText);
                     Log.d("search", "Text: " + newText);
 
                     return true;
@@ -167,6 +186,8 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
                 return false;
             }
         });
+
+        mSearchView.setOnSearchClickListener(v -> mHomeActivityPresenter.clearMoviesList());
         return true;
     }
 

@@ -22,6 +22,12 @@ public interface TmdbApi {
             @Query("page") Long page
     );
 
+    @GET("search/movie")
+    Call<UpcomingMoviesResponse> searchedMovies(
+            @Query("query") String query,
+            @Query("page") Long page
+    );
+
     @GET("movie/{id}")
     Call<Movie> movie(
             @Path("id") Long id

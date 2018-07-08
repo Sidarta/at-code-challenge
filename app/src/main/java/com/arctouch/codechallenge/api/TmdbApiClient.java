@@ -43,11 +43,16 @@ public class TmdbApiClient {
             retrofit = builder.build();
         }
 
-        if(!httpClient.interceptors().contains(languageAndRegion)){
-            httpClient.addInterceptor(languageAndRegion);
-            builder.client(httpClient.build());
-            retrofit = builder.build();
-        }
+        /**
+        Removing localization interceptor for testing purposes: localized queries return few results
+        and makes it difficult to test the infinite scrolling.
+        On ideal scenario, we would use this interceptor to add localization parameters to query
+         */
+//        if(!httpClient.interceptors().contains(languageAndRegion)){
+//            httpClient.addInterceptor(languageAndRegion);
+//            builder.client(httpClient.build());
+//            retrofit = builder.build();
+//        }
 
         return retrofit.create(serviceClass);
     }
