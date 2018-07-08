@@ -1,7 +1,7 @@
 package com.arctouch.codechallenge.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.arctouch.codechallenge.R;
@@ -125,5 +128,51 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
 
     public interface MovieItemListener {
         void onMovieItemClick(Movie movieClicked);
+    }
+
+    //search menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        //inflate
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        //searchview
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.search)
+                .getActionView();
+
+        //hint text
+        mSearchView.setQueryHint(getString(R.string.search_hint));
+
+        // example
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mSearchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length() >= 3){
+
+                    //perform query here
+                    Log.d("search", "Text: " + newText);
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        return true;
+    }
+
+    // implement this if we want to handle more complex data on screen rotation
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

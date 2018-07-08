@@ -16,15 +16,14 @@ public class GenresRepositoryImplementation implements GenresRepository {
     private TmdbApi service;
 
     public GenresRepositoryImplementation() {
-        TmdbApiClient client = new TmdbApiClient();
-        this.service = client.getClient().create(TmdbApi.class);
+        service = TmdbApiClient.createService(TmdbApi.class);
     }
 
     @Override
     public void getGenres(OnGetGenres onGetGenres) {
         //if our cache is null, we fetch and cache genres - we also return the callbacks for other usages
         if (Cache.getGenres() == null) {
-            service.genres(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE).enqueue(new Callback<GenreResponse>() {
+            service.genres().enqueue(new Callback<GenreResponse>() {
                 @Override
                 public void onResponse(Call<GenreResponse> call, Response<GenreResponse> response) {
                     if (response.isSuccessful()) {

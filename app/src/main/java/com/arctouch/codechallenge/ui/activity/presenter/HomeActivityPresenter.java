@@ -9,6 +9,7 @@ public interface HomeActivityPresenter {
     void getUpcomingMovies();
     void getMoreUpcomingMovies();
     void start();
+//    void getUpcomingMovies(String query);
 
     interface View {
         void refreshMoviesList(List<Movie> movies);

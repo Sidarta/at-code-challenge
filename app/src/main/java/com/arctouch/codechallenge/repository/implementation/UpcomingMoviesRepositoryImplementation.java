@@ -15,13 +15,12 @@ public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRep
     private TmdbApi service;
 
     public UpcomingMoviesRepositoryImplementation() {
-        TmdbApiClient client = new TmdbApiClient();
-        this.service = client.getClient().create(TmdbApi.class);
+        service = TmdbApiClient.createService(TmdbApi.class);
     }
 
     @Override
     public void getUpcomingMovies(OnGetUpcomingMovies onGetUpcomingMovies) {
-        service.upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, (long) 1, TmdbApi.DEFAULT_REGION).enqueue(new Callback<UpcomingMoviesResponse>() {
+        service.upcomingMovies((long) 1).enqueue(new Callback<UpcomingMoviesResponse>() {
             @Override
             public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
                 if(response.isSuccessful()){
@@ -40,7 +39,7 @@ public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRep
 
     @Override
     public void getUpcomingMovies(int page, OnGetUpcomingMovies onGetUpcomingMovies) {
-        service.upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, (long) page + 1, TmdbApi.DEFAULT_REGION).enqueue(new Callback<UpcomingMoviesResponse>() {
+        service.upcomingMovies((long) page + 1).enqueue(new Callback<UpcomingMoviesResponse>() {
             @Override
             public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
                 if(response.isSuccessful()){

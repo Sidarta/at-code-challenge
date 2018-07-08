@@ -15,14 +15,13 @@ public class MovieRepositoryImplementation implements MovieRepository{
     private TmdbApi service;
 
     public MovieRepositoryImplementation() {
-        TmdbApiClient client = new TmdbApiClient();
-        this.service = client.getClient().create(TmdbApi.class);
+        service = TmdbApiClient.createService(TmdbApi.class);
     }
 
 
     @Override
     public void getMovie(Long movieId, OnGetMovie onGetMovie) {
-        service.movie(movieId, TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE).enqueue(new Callback<Movie>() {
+        service.movie(movieId).enqueue(new Callback<Movie>() {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 if(response.isSuccessful()){

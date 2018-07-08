@@ -57,21 +57,21 @@
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:textColor="@color/color_black"
-                            tools:text="Movie Name"/>
+                            tools:text=""/>
 
                         <TextView
                             android:id="@+id/movie_genres"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/horizontal_padding"
-                            tools:text="Drama, Action"/>
+                            tools:text=""/>
 
                         <TextView
                             android:id="@+id/movie_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="@dimen/horizontal_padding"
-                            tools:text="2h 22m"/>
+                            tools:text=""/>
 
                         <TextView
                             android:id="@+id/movie_tagline"
@@ -80,7 +80,7 @@
                             android:textStyle="italic"
                             android:textSize="12sp"
                             android:layout_marginTop="@dimen/horizontal_padding"
-                            tools:text="Here's to the crazy ones"/>
+                            tools:text=""/>
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/activity_vertical_margin"
                     android:textColor="@color/color_black"
-                    tools:text="Movie description"/>
+                    tools:text=""/>
 
                 <View
                     android:layout_width="match_parent"
@@ -136,7 +136,7 @@
                         android:id="@+id/movie_release_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="12/12/2019"/>
+                        tools:text=""/>
 
 
                     <TextView
@@ -153,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:autoLink="web"
                         android:textColorLink="@color/linkColor"
-                        tools:text="https://www.imdb.com/title/tt1022603/"/>
+                        tools:text=""/>
 
                 </LinearLayout>
 

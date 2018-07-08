@@ -1,5 +1,6 @@
 package com.arctouch.codechallenge.ui.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
+//TODO localize release date
 
 public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsActivityPresenter.View{
 
@@ -78,7 +81,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
 
         mTxtViewMovieName.setText(movie.getTitle());
         mTxtViewMovieGenres.setText(TextUtils.join(", ", movie.getGenres()));
-        String minutesDutarion = movie.getDuration().concat(getString(R.string.minutes_abbreviation));
+        String minutesDutarion = movie.getDuration() != null ? movie.getDuration() + getString(R.string.minutes_abbreviation) : ""; //there are some movies with null duration
         mTxtViewMovieDuration.setText(minutesDutarion);
         mTxtViewMovieTagline.setText(movie.getTagline());
         mTxtMovieOverview.setText(movie.getOverview());
@@ -126,5 +129,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    // implement this if we want to handle more complex data on screen rotation
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

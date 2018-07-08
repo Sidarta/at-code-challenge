@@ -6,4 +6,6 @@
     <string name="imdb_link">IMDb Page</string>
     <string name="movie_backdrop">movie backdrop</string>
     <string name="minutes_abbreviation">min</string>
+    <string name="search_title">Search Movies</string>
+    <string name="search_hint">Insert movie title…</string>
 </resources>

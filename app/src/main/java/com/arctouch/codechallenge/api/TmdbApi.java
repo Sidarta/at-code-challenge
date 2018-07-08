@@ -11,29 +11,19 @@ import retrofit2.http.Query;
 
 public interface TmdbApi {
 
-    String URL = "https://api.themoviedb.org/3/";
+    String BASE_URL = "https://api.themoviedb.org/3/";
     String API_KEY = "1f54bd990f1cdfb230adb312546d765d";
-    String DEFAULT_LANGUAGE = "";
-    String DEFAULT_REGION = ""; //TODO improve this - empty because localizing it diminishes the results
 
     @GET("genre/movie/list")
-    Call<GenreResponse> genres(
-            @Query("api_key") String apiKey,
-            @Query("language") String language
-    );
+    Call<GenreResponse> genres();
 
     @GET("movie/upcoming")
     Call<UpcomingMoviesResponse> upcomingMovies(
-            @Query("api_key") String apiKey,
-            @Query("language") String language,
-            @Query("page") Long page,
-            @Query("region") String region
+            @Query("page") Long page
     );
 
     @GET("movie/{id}")
     Call<Movie> movie(
-            @Path("id") Long id,
-            @Query("api_key") String apiKey,
-            @Query("language") String language
+            @Path("id") Long id
     );
 }
