@@ -14,6 +14,8 @@ public class MovieDetailsActivityPresenterImplementation implements MovieDetails
 
     private MovieDetailsActivityPresenter.View mView;
 
+    private static final String TAG = "MovieDet Activity Pres.";
+
     public MovieDetailsActivityPresenterImplementation(View mView) {
         this.mView = mView;
     }
@@ -37,6 +39,6 @@ public class MovieDetailsActivityPresenterImplementation implements MovieDetails
 
     @Override
     public void onGetMovieFailed(String errorMsg) {
-        Log.e("Movie Det Presenter", "Failed to get movie");
+        Log.e(TAG, errorMsg);
     }
 }

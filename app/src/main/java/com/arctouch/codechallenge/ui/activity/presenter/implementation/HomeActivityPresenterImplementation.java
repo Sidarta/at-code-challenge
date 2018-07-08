@@ -18,6 +18,8 @@ import java.util.List;
 
 public class HomeActivityPresenterImplementation implements HomeActivityPresenter, OnGetUpcomingMovies, OnGetGenres{
 
+    private static final String TAG = "HomeActivity Pres.";
+
     private HomeActivityPresenter.View mView;
     private int mPage = 0;
 
@@ -66,7 +68,7 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
     @Override
     public void onGetUpcomingMoviesFailed(String errorMsg) {
         //TODO need better message here?
-        Log.e("Presenter", "Could not load movies");
+        Log.e(TAG, errorMsg);
     }
 
     @Override
@@ -77,7 +79,6 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
 
     @Override
     public void onGetGenresFailed(String errorMsg) {
-        //TODO need better message here?
-        Log.e("Presenter", "Could not load genres for movies");
+        Log.e(TAG, errorMsg);
     }
 }

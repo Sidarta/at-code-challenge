@@ -32,7 +32,7 @@ public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRep
 
             @Override
             public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetUpcomingMovies.onGetUpcomingMoviesFailed("Get upcoming movies failed: " + t.getMessage());
+                onGetUpcomingMovies.onGetUpcomingMoviesFailed(t.getMessage());
             }
         });
     }
@@ -51,7 +51,7 @@ public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRep
 
             @Override
             public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetUpcomingMovies.onGetUpcomingMoviesFailed("Get upcoming movies failed: " + t.getMessage());
+                onGetUpcomingMovies.onGetUpcomingMoviesFailed(t.getMessage());
             }
         });
     }

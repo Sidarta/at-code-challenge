@@ -33,7 +33,7 @@ public class MovieRepositoryImplementation implements MovieRepository{
 
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
-                onGetMovie.onGetMovieFailed("Get movie failed: " + t.getMessage());
+                onGetMovie.onGetMovieFailed(t.getMessage());
             }
         });
     }
