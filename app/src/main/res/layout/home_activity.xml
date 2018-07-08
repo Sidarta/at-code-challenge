@@ -8,10 +8,13 @@
     tools:context="com.arctouch.codechallenge.ui.activity.HomeActivity">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/relative_layout">
+    <android.support.constraint.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -24,22 +27,16 @@
             tools:itemCount="10"
             tools:listitem="@layout/movie_item" />
 
-        <!--<ProgressBar-->
-            <!--android:id="@+id/progressBar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--tools:visibility="gone" />-->
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_top"
-
+            app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+            app:layout_constraintRight_toRightOf="@id/recyclerView"
             android:visibility="gone"
             android:src="@drawable/ic_keyboard_arrow_up_white_24dp"
             android:layout_margin="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
 
-    </RelativeLayout>
-
+    </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,5 +1,7 @@
 package com.arctouch.codechallenge.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +18,7 @@ import com.arctouch.codechallenge.ui.activity.presenter.HomeActivityPresenter;
 import com.arctouch.codechallenge.ui.activity.presenter.implementation.HomeActivityPresenterImplementation;
 import com.arctouch.codechallenge.ui.adapter.HomeAdapter;
 import com.arctouch.codechallenge.ui.listener.HomeRecyclerViewScrollListener;
+import com.arctouch.codechallenge.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +39,13 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
     @BindView(R.id.fab_top)
     FloatingActionButton mFabGoToTop;
 
+    //presenter
     private HomeActivityPresenter mHomeActivityPresenter;
 
+    //scroll listener for infinite scrolling
     private HomeRecyclerViewScrollListener mScrollListener;
 
+    //list item listener for tap action
     private MovieItemListener mMovieItemListener;
 
     @Override
@@ -56,6 +62,9 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
         //listener for clicks/taps on a movie on the movies list
         mMovieItemListener = movieClicked -> {
             //open new activity on click
+            Intent intent = new Intent(this, MovieDetailsActivity.class);
+            intent.putExtra(Constants.EXTRA_MOVIE_ID, movieClicked.getId());
+            this.startActivity(intent);
             Log.d("HomeAct", "Movie tap action: " + movieClicked.toString());
         };
 

@@ -58,7 +58,7 @@ public abstract class HomeRecyclerViewScrollListener extends RecyclerView.OnScro
             lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         }
 
-        if(lastVisibleItemPosition > 1) {
+        if(lastVisibleItemPosition > 6) {
             showTopButton(true);
         } else {
             showTopButton(false);

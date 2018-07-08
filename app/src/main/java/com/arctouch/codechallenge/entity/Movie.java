@@ -18,13 +18,19 @@ public class Movie {
     private String backdropPath;
     @Json(name = "release_date")
     private String releaseDate;
+    @Json(name = "runtime")
+    private String duration;
+    private String tagline;
+    @Json(name = "imdb_id")
+    private String imdbid;
 
     public Movie() {
         genreIds = new ArrayList<>();
         genres = new ArrayList<>();
     }
 
-    public Movie(int id, String title, String overview, List<Genre> genres, List<Integer> genreIds, String posterPath, String backdropPath, String releaseDate) {
+    public Movie(int id, String title, String overview, List<Genre> genres, List<Integer> genreIds,
+                 String posterPath, String backdropPath, String releaseDate, String duration, String tagline, String imdbid) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -33,6 +39,9 @@ public class Movie {
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.tagline = tagline;
+        this.imdbid = imdbid;
     }
 
     public int getId() {
@@ -99,6 +108,30 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public String getImdbid() {
+        return imdbid;
+    }
+
+    public void setImdbid(String imdbid) {
+        this.imdbid = imdbid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -144,6 +177,7 @@ public class Movie {
                 ", posterPath='" + posterPath + '\'' +
                 ", backdropPath='" + backdropPath + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
+                ", releaseDate='" + duration + '\'' +
                 '}';
     }
 }
