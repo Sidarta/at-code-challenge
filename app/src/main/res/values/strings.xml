@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Code Challenge</string>
     <string name="movie_and_genres">%s - %s</string>
+    <string name="details_title">Details</string>
+    <string name="release_date">Release Date</string>
+    <string name="imdb_link">IMDb Page</string>
+    <string name="movie_backdrop">movie backdrop</string>
+    <string name="minutes_abbreviation">min</string>
+    <string name="search_title">Search Movies</string>
+    <string name="search_hint">Insert movie title…</string>
 </resources>
