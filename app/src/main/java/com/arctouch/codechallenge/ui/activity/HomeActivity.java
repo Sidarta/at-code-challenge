@@ -22,12 +22,16 @@ import com.arctouch.codechallenge.ui.activity.presenter.implementation.HomeActiv
 import com.arctouch.codechallenge.ui.adapter.HomeAdapter;
 import com.arctouch.codechallenge.ui.listener.HomeRecyclerViewScrollListener;
 import com.arctouch.codechallenge.util.Constants;
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class HomeActivity extends AppCompatActivity implements HomeActivityPresenter.View, SwipeRefreshLayout.OnRefreshListener{
 
@@ -54,6 +58,8 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
     //search view
     SearchView mSearchView;
 
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +69,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
 
         mHomeSwipeRefresh.setOnRefreshListener(this);
 
-        mHomeActivityPresenter = new HomeActivityPresenterImplementation(this);
+        mHomeActivityPresenter = new HomeActivityPresenterImplementation(this, compositeDisposable);
 
         //listener for clicks/taps on a movie on the movies list
         mMovieItemListener = movieClicked -> {
@@ -162,30 +168,57 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
         //hint text
         mSearchView.setQueryHint(getString(R.string.search_hint));
 
+        RxSearchView
+                .queryTextChangeEvents(mSearchView)
+                .skipInitialValue()
+//                .observeOn(AndroidSchedulers.mainThread()) //TODO why no subscribe on and observe on?
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .map(textViewTextChanged -> textViewTextChanged.queryText().toString())
+//                .subscribeOn(Schedulers.io())
+                .subscribe(new DisposableObserver<String>() { //TODO why lambda does not work here?
+                    @Override
+                    public void onNext(String s) {
+                        mHomeActivityPresenter.getSearchMovies(s);
+                        Log.d("search", "Text: " + s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("search", "Error: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("search", "completei rs");
+                    }
+                });
+
+
+
         // perform queries
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mSearchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                // we only perform queries bigger than 3 chars
-                if(newText.length() >= 3){
-
-                    //perform query here
-                    mHomeActivityPresenter.getSearchMovies(newText);
-                    Log.d("search", "Text: " + newText);
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                mSearchView.clearFocus();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                // we only perform queries bigger than 3 chars
+//                if(newText.length() >= 3){
+//
+//                    //perform query here
+//                    mHomeActivityPresenter.getSearchMovies(newText);
+//                    Log.d("search", "Text: " + newText);
+//
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
 
         mSearchView.setOnSearchClickListener(v -> mHomeActivityPresenter.clearMoviesList());
         return true;
@@ -195,5 +228,11 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHomeActivityPresenter.clearCompositeDisposables();
     }
 }

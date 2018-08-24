@@ -6,14 +6,16 @@ import com.arctouch.codechallenge.api.interceptors.LanguageAndRegionInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class TmdbApiClient {
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
-            .baseUrl(TmdbApi.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create());
+                    .baseUrl(TmdbApi.BASE_URL)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(MoshiConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
 

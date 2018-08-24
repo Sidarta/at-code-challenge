@@ -6,6 +6,9 @@ import com.arctouch.codechallenge.callback.OnGetSearchMovies;
 import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.repository.SearchMoviesRepository;
 
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,41 +21,18 @@ public class SearchMoviesRepositoryImplementation implements SearchMoviesReposit
         service = TmdbApiClient.createService(TmdbApi.class);
     }
 
-    @Override
-    public void getSearchMovies(String query, OnGetSearchMovies onGetSearchMovies) {
-        service.searchedMovies(query, (long) 1).enqueue(new Callback<UpcomingMoviesResponse>() {
-            @Override
-            public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
-                if(response.isSuccessful()){
-                    onGetSearchMovies.onGetSearchMoviesSuccessful(response.body());
-                } else {
-                    onGetSearchMovies.onGetSearchMoviesFailed("Response not successful");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetSearchMovies.onGetSearchMoviesFailed(t.getMessage());
-            }
-        });
+    @Override
+    public Maybe<UpcomingMoviesResponse> getSearchMovies(String query) {
+        return service.searchedMovies(query, (long)1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public void getSearchMovies(String query, int page, OnGetSearchMovies onGetSearchMovies) {
-        service.searchedMovies(query, (long) page + 1).enqueue(new Callback<UpcomingMoviesResponse>() {
-            @Override
-            public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
-                if(response.isSuccessful()){
-                    onGetSearchMovies.onGetSearchMoviesSuccessful(response.body());
-                } else {
-                    onGetSearchMovies.onGetSearchMoviesFailed("Response not successful");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetSearchMovies.onGetSearchMoviesFailed(t.getMessage());
-            }
-        });
+    public Maybe<UpcomingMoviesResponse> getSearchMovies(String query, int page) {
+        return service.searchedMovies(query, (long) page + 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

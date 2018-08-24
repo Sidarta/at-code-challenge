@@ -1,8 +1,11 @@
 package com.arctouch.codechallenge.repository;
 
 import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
+import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
+
+import io.reactivex.Observable;
 
 public interface UpcomingMoviesRepository {
-    void getUpcomingMovies(OnGetUpcomingMovies onGetUpcomingMovies);
-    void getUpcomingMovies(int page, OnGetUpcomingMovies onGetUpcomingMovies);
+    Observable<UpcomingMoviesResponse> getUpcomingMovies();
+    Observable<UpcomingMoviesResponse> getUpcomingMovies(int page);
 }

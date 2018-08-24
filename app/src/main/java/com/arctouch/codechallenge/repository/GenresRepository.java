@@ -1,7 +1,11 @@
 package com.arctouch.codechallenge.repository;
 
-import com.arctouch.codechallenge.callback.OnGetGenres;
+import com.arctouch.codechallenge.entity.Genre;
+
+import java.util.List;
+
+import io.reactivex.Observable;
 
 public interface GenresRepository {
-    void getGenres(OnGetGenres onGetGenres);
+    Observable<List<Genre>> getGenres();
 }

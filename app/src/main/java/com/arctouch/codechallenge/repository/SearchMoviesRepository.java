@@ -1,8 +1,10 @@
 package com.arctouch.codechallenge.repository;
 
-import com.arctouch.codechallenge.callback.OnGetSearchMovies;
+import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
+
+import io.reactivex.Maybe;
 
 public interface SearchMoviesRepository {
-    void getSearchMovies(String query, OnGetSearchMovies onGetSearchMovies);
-    void getSearchMovies(String query, int page, OnGetSearchMovies onGetSearchMovies);
+    Maybe<UpcomingMoviesResponse> getSearchMovies(String query);
+    Maybe<UpcomingMoviesResponse> getSearchMovies(String query, int page);
 }

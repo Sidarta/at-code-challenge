@@ -1,7 +1,9 @@
 package com.arctouch.codechallenge.repository;
 
-import com.arctouch.codechallenge.callback.OnGetMovie;
+import com.arctouch.codechallenge.entity.Movie;
+
+import io.reactivex.Observable;
 
 public interface MovieRepository {
-    void getMovie(Long movieId, OnGetMovie onGetMovie);
+    Observable<Movie> getMovie(Long movieId);
 }

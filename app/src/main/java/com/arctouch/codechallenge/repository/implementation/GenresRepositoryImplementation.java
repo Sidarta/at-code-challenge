@@ -2,14 +2,16 @@ package com.arctouch.codechallenge.repository.implementation;
 
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.api.TmdbApiClient;
-import com.arctouch.codechallenge.callback.OnGetGenres;
 import com.arctouch.codechallenge.data.Cache;
+import com.arctouch.codechallenge.entity.Genre;
 import com.arctouch.codechallenge.entity.GenreResponse;
 import com.arctouch.codechallenge.repository.GenresRepository;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class GenresRepositoryImplementation implements GenresRepository {
 
@@ -20,24 +22,12 @@ public class GenresRepositoryImplementation implements GenresRepository {
     }
 
     @Override
-    public void getGenres(OnGetGenres onGetGenres) {
-        service.genres().enqueue(new Callback<GenreResponse>() {
-            @Override
-            public void onResponse(Call<GenreResponse> call, Response<GenreResponse> response) {
-                if (response.isSuccessful()) {
-                    GenreResponse gr = response.body();
-                    Cache.setGenres(gr.getGenres());
-                    onGetGenres.onGetGenresSuccessful(gr.getGenres());
-                } else {
-                    onGetGenres.onGetGenresFailed("Response not successful");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GenreResponse> call, Throwable t) {
-                onGetGenres.onGetGenresFailed(t.getMessage());
-            }
-        });
+    public Observable<List<Genre>> getGenres() {
+        return service.genres()
+                .subscribeOn(Schedulers.io())
+                .map(GenreResponse::getGenres)
+                .doOnNext(Cache::setGenres)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
 
