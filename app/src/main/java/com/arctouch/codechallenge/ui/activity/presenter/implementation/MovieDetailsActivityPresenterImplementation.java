@@ -1,10 +1,7 @@
 package com.arctouch.codechallenge.ui.activity.presenter.implementation;
 
 import android.content.Intent;
-import android.util.Log;
 
-import com.arctouch.codechallenge.callback.OnGetMovie;
-import com.arctouch.codechallenge.entity.Movie;
 import com.arctouch.codechallenge.repository.MovieRepository;
 import com.arctouch.codechallenge.repository.implementation.MovieRepositoryImplementation;
 import com.arctouch.codechallenge.ui.activity.presenter.MovieDetailsActivityPresenter;

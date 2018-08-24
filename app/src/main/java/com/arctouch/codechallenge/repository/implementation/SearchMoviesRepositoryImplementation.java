@@ -2,16 +2,12 @@ package com.arctouch.codechallenge.repository.implementation;
 
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.api.TmdbApiClient;
-import com.arctouch.codechallenge.callback.OnGetSearchMovies;
 import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.repository.SearchMoviesRepository;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchMoviesRepositoryImplementation implements SearchMoviesRepository{
 

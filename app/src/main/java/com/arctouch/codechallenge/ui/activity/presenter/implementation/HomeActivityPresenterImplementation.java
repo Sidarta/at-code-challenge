@@ -1,10 +1,5 @@
 package com.arctouch.codechallenge.ui.activity.presenter.implementation;
 
-import android.util.Log;
-
-import com.arctouch.codechallenge.callback.OnGetGenres;
-import com.arctouch.codechallenge.callback.OnGetSearchMovies;
-import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.entity.Genre;
 import com.arctouch.codechallenge.entity.Movie;
@@ -18,7 +13,6 @@ import com.arctouch.codechallenge.repository.implementation.UpcomingMoviesReposi
 import com.arctouch.codechallenge.ui.activity.presenter.HomeActivityPresenter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 

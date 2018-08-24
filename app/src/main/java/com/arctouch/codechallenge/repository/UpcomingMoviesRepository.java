@@ -1,6 +1,5 @@
 package com.arctouch.codechallenge.repository;
 
-import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
 import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
 
 import io.reactivex.Observable;
