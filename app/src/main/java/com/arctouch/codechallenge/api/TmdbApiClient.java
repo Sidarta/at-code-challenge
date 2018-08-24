@@ -17,8 +17,6 @@ public class TmdbApiClient {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create());
 
-    private static Retrofit retrofit = builder.build();
-
     private static HttpLoggingInterceptor logging =
             new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -31,19 +29,15 @@ public class TmdbApiClient {
     private static OkHttpClient.Builder httpClient =
             new OkHttpClient.Builder();
 
+    //getting context on createService so we can create a cache dir
     public static <S> S createService(Class<S> serviceClass) {
 
-        if(!httpClient.interceptors().contains(logging)){
-            httpClient.addInterceptor(logging);
-            builder.client(httpClient.build());
-            retrofit = builder.build();
-        }
+        httpClient.interceptors().clear(); //so we dont add duplicates
 
-        if(!httpClient.interceptors().contains(apiKey)){
-            httpClient.addInterceptor(apiKey);
-            builder.client(httpClient.build());
-            retrofit = builder.build();
-        }
+        httpClient.addInterceptor(logging);
+        httpClient.addInterceptor(apiKey);
+        
+        builder.client(httpClient.build());
 
         /**
         Removing localization interceptor for testing purposes: localized queries return few results
@@ -56,6 +50,6 @@ public class TmdbApiClient {
 //            retrofit = builder.build();
 //        }
 
-        return retrofit.create(serviceClass);
+        return builder.build().create(serviceClass);
     }
 }

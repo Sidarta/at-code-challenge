@@ -193,8 +193,6 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityPrese
                     }
                 });
 
-
-
         // perform queries
 //        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override

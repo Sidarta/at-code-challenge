@@ -128,12 +128,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         }
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
     // implement this if we want to handle more complex data on screen rotation
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
