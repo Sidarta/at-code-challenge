@@ -1,10 +1,5 @@
 package com.arctouch.codechallenge.ui.activity.presenter.implementation;
 
-import android.util.Log;
-
-import com.arctouch.codechallenge.callback.OnGetGenres;
-import com.arctouch.codechallenge.callback.OnGetSearchMovies;
-import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.entity.Genre;
 import com.arctouch.codechallenge.entity.Movie;
@@ -18,9 +13,10 @@ import com.arctouch.codechallenge.repository.implementation.UpcomingMoviesReposi
 import com.arctouch.codechallenge.ui.activity.presenter.HomeActivityPresenter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class HomeActivityPresenterImplementation implements HomeActivityPresenter, OnGetUpcomingMovies, OnGetGenres, OnGetSearchMovies{
+import io.reactivex.disposables.CompositeDisposable;
+
+public class HomeActivityPresenterImplementation implements HomeActivityPresenter{
 
     private static final String TAG = "HomeActivity Pres.";
 
@@ -32,7 +28,9 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
     private GenresRepository genresRepository;
     private SearchMoviesRepository searchMoviesRepository;
 
-    public HomeActivityPresenterImplementation(View mView) {
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public HomeActivityPresenterImplementation(View mView, CompositeDisposable compositeDisposable) {
         upcomingMoviesRepository = new UpcomingMoviesRepositoryImplementation();
         genresRepository = new GenresRepositoryImplementation();
         searchMoviesRepository = new SearchMoviesRepositoryImplementation();
@@ -41,28 +39,47 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
 
     @Override
     public void getUpcomingMovies() {
-        upcomingMoviesRepository.getUpcomingMovies(this);
+        compositeDisposable.add(
+                upcomingMoviesRepository.getUpcomingMovies()
+                        .subscribe(this::handleMoviesResponse)
+        );
     }
 
     @Override
     public void getMoreUpcomingMovies() {
-        upcomingMoviesRepository.getUpcomingMovies(this.mPage, this);
+        compositeDisposable.add(
+                upcomingMoviesRepository.getUpcomingMovies(this.mPage)
+                .subscribe(this::handleMoviesResponse)
+        );
     }
 
     @Override
     public void start() {
-        //get genres first to update cache
-        genresRepository.getGenres(this);
+        //get genres then movies, to make sure genres cache is filled
+        compositeDisposable.add(
+            genresRepository.getGenres()
+                    .concatMap(genres -> upcomingMoviesRepository.getUpcomingMovies()) //ugly because we're not using genres
+                    .subscribe(this::handleMoviesResponse)
+        );
     }
 
     @Override
     public void getSearchMovies(String query) {
-        searchMoviesRepository.getSearchMovies(query, this);
+        compositeDisposable.add(
+            searchMoviesRepository.getSearchMovies(query)
+                    .onErrorComplete()
+                    .subscribe(this::handleMoviesResponse)
+        );
     }
 
     @Override
     public void getMoreSearchMovies(String query) {
-        searchMoviesRepository.getSearchMovies(query, this.mPage, this);
+        compositeDisposable.add(
+                searchMoviesRepository.getSearchMovies(query, this.mPage)
+                        .onErrorComplete()
+//                        .doOnError(Throwable::printStackTrace) //does not work because the onErrorComplete swallows the throwable
+                        .subscribe(this::handleMoviesResponse)
+        );
     }
 
     @Override
@@ -71,7 +88,11 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
     }
 
     @Override
-    public void onGetUpcomingMoviesSuccessful(UpcomingMoviesResponse upcomingMoviesResponse) {
+    public void clearCompositeDisposables() {
+        compositeDisposable.clear();
+    }
+
+    private void handleMoviesResponse(UpcomingMoviesResponse upcomingMoviesResponse){
         mPage = upcomingMoviesResponse.getPage();
 
         for (Movie movie : upcomingMoviesResponse.getResults()) {
@@ -87,45 +108,5 @@ public class HomeActivityPresenterImplementation implements HomeActivityPresente
         } else {
             mView.addMoviesToList(upcomingMoviesResponse.getResults());
         }
-    }
-
-    @Override
-    public void onGetUpcomingMoviesFailed(String errorMsg) {
-        Log.e(TAG, errorMsg);
-    }
-
-    @Override
-    public void onGetGenresSuccessful(List<Genre> genres) {
-        //after genres fetch, we keep the initialization going - fetch upcoming movies
-        this.getUpcomingMovies();
-    }
-
-    @Override
-    public void onGetGenresFailed(String errorMsg) {
-        Log.e(TAG, errorMsg);
-    }
-
-    @Override
-    public void onGetSearchMoviesSuccessful(UpcomingMoviesResponse upcomingMoviesResponse) {
-        mPage = upcomingMoviesResponse.getPage();
-
-        for (Movie movie : upcomingMoviesResponse.getResults()) {
-            for (Genre genre : Cache.getGenres()) {
-                if (movie.getGenreIds().contains(genre.getId())) {
-                    movie.getGenres().add(genre);
-                }
-            }
-        }
-
-        if(mPage == 1) {
-            mView.refreshMoviesList(upcomingMoviesResponse.getResults());
-        } else {
-            mView.addMoviesToList(upcomingMoviesResponse.getResults());
-        }
-    }
-
-    @Override
-    public void onGetSearchMoviesFailed(String errorMsg) {
-        Log.e(TAG, errorMsg);
     }
 }

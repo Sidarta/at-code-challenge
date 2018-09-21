@@ -2,13 +2,12 @@ package com.arctouch.codechallenge.repository.implementation;
 
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.api.TmdbApiClient;
-import com.arctouch.codechallenge.callback.OnGetUpcomingMovies;
 import com.arctouch.codechallenge.entity.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.repository.UpcomingMoviesRepository;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRepository {
 
@@ -18,41 +17,18 @@ public class UpcomingMoviesRepositoryImplementation implements UpcomingMoviesRep
         service = TmdbApiClient.createService(TmdbApi.class);
     }
 
-    @Override
-    public void getUpcomingMovies(OnGetUpcomingMovies onGetUpcomingMovies) {
-        service.upcomingMovies((long) 1).enqueue(new Callback<UpcomingMoviesResponse>() {
-            @Override
-            public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
-                if(response.isSuccessful()){
-                    onGetUpcomingMovies.onGetUpcomingMoviesSuccessful(response.body());
-                } else {
-                    onGetUpcomingMovies.onGetUpcomingMoviesFailed("Response not successful");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetUpcomingMovies.onGetUpcomingMoviesFailed(t.getMessage());
-            }
-        });
+    @Override
+    public Observable<UpcomingMoviesResponse> getUpcomingMovies() {
+        return service.upcomingMovies((long)1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public void getUpcomingMovies(int page, OnGetUpcomingMovies onGetUpcomingMovies) {
-        service.upcomingMovies((long) page + 1).enqueue(new Callback<UpcomingMoviesResponse>() {
-            @Override
-            public void onResponse(Call<UpcomingMoviesResponse> call, Response<UpcomingMoviesResponse> response) {
-                if(response.isSuccessful()){
-                    onGetUpcomingMovies.onGetUpcomingMoviesSuccessful(response.body());
-                } else {
-                    onGetUpcomingMovies.onGetUpcomingMoviesFailed("Response not successful");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UpcomingMoviesResponse> call, Throwable t) {
-                onGetUpcomingMovies.onGetUpcomingMoviesFailed(t.getMessage());
-            }
-        });
+    public Observable<UpcomingMoviesResponse> getUpcomingMovies(int page) {
+        return service.upcomingMovies((long)page + 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

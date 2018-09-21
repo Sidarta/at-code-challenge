@@ -1,18 +1,18 @@
 package com.arctouch.codechallenge.ui.activity.presenter.implementation;
 
 import android.content.Intent;
-import android.util.Log;
 
-import com.arctouch.codechallenge.callback.OnGetMovie;
-import com.arctouch.codechallenge.entity.Movie;
 import com.arctouch.codechallenge.repository.MovieRepository;
 import com.arctouch.codechallenge.repository.implementation.MovieRepositoryImplementation;
 import com.arctouch.codechallenge.ui.activity.presenter.MovieDetailsActivityPresenter;
 import com.arctouch.codechallenge.util.Constants;
 
-public class MovieDetailsActivityPresenterImplementation implements MovieDetailsActivityPresenter, OnGetMovie{
+import io.reactivex.disposables.CompositeDisposable;
+
+public class MovieDetailsActivityPresenterImplementation implements MovieDetailsActivityPresenter{
 
     private MovieDetailsActivityPresenter.View mView;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private static final String TAG = "MovieDet Activity Pres.";
 
@@ -23,7 +23,11 @@ public class MovieDetailsActivityPresenterImplementation implements MovieDetails
     @Override
     public void getMovie(int movieId) {
         MovieRepository repository = new MovieRepositoryImplementation();
-        repository.getMovie((long) movieId, this);
+
+        compositeDisposable.add(
+            repository.getMovie((long)movieId)
+                    .subscribe(movie -> mView.showMovieDetails(movie))
+        );
     }
 
     @Override
@@ -33,12 +37,7 @@ public class MovieDetailsActivityPresenterImplementation implements MovieDetails
     }
 
     @Override
-    public void onGetMovieSuccessful(Movie movie) {
-        mView.showMovieDetails(movie);
-    }
-
-    @Override
-    public void onGetMovieFailed(String errorMsg) {
-        Log.e(TAG, errorMsg);
+    public void clearCompositeDisposable() {
+        compositeDisposable.clear();
     }
 }

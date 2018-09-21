@@ -4,6 +4,8 @@ import com.arctouch.codechallenge.entity.Movie;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public interface HomeActivityPresenter {
 
     void getUpcomingMovies();
@@ -12,6 +14,8 @@ public interface HomeActivityPresenter {
     void getSearchMovies(String query);
     void getMoreSearchMovies(String query);
     void clearMoviesList();
+
+    void clearCompositeDisposables();
 
     interface View {
         void refreshMoviesList(List<Movie> movies);

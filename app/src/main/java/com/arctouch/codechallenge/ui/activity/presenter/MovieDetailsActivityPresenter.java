@@ -9,6 +9,8 @@ public interface MovieDetailsActivityPresenter {
     void getMovie(int movieId);
     void start(Intent intent);
 
+    void clearCompositeDisposable();
+
     interface View {
         void showMovieDetails(Movie movie);
         void updateProgressBar(boolean show);

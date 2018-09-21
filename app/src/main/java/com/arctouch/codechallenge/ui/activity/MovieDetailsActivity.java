@@ -23,6 +23,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import io.reactivex.disposables.CompositeDisposable;
 
 //TODO localize release date
 
@@ -62,6 +63,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     SmoothProgressBar mProgressBar;
 
     MovieDetailsActivityPresenter mMovieDetailsActivityPresenter;
+
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,15 +128,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         }
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
     // implement this if we want to handle more complex data on screen rotation
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.mMovieDetailsActivityPresenter.clearCompositeDisposable();
     }
 }
