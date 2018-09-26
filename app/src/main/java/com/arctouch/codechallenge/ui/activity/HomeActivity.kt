@@ -80,7 +80,7 @@ class HomeActivity : AppCompatActivity(), HomeActivityPresenter.View, SwipeRefre
                 val query = mSearchView.query
 
                 //if there is some text on query
-                if (query != null && query.length > 0) {
+                if (query != null && query.isNotEmpty()) {
 
                     //query needs to be bigger than 3 for the scrolling to happen
                     if (query.length >= 3) {
@@ -157,7 +157,7 @@ class HomeActivity : AppCompatActivity(), HomeActivityPresenter.View, SwipeRefre
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .map { textViewTextChanged -> textViewTextChanged.queryText().toString() }
                 //                .subscribeOn(Schedulers.io())
-                .subscribe(object : DisposableObserver<String>() { //TODO why lambda does not work here?
+                .subscribe(object : DisposableObserver<String>() {
                     override fun onNext(s: String) {
                         mHomeActivityPresenter!!.getSearchMovies(s)
                         Log.d("search", "Text: $s")
@@ -172,7 +172,7 @@ class HomeActivity : AppCompatActivity(), HomeActivityPresenter.View, SwipeRefre
                     }
                 })
 
-        mSearchView.setOnSearchClickListener { v -> mHomeActivityPresenter!!.clearMoviesList() }
+        mSearchView.setOnSearchClickListener { mHomeActivityPresenter!!.clearMoviesList() }
         return true
     }
 
